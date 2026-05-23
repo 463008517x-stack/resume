@@ -1,0 +1,73 @@
+---
+import { RESUME } from '@/data/resume';
+import { type Locale } from '@/config';
+import { pickLocale } from '@/i18n';
+import Badge from '@/components/ui/Badge.astro';
+import FadeIn from '@/components/interactive/FadeIn.tsx';
+
+interface Props {
+  locale: Locale;
+  t: (key: string) => string;
+}
+const { locale, t } = Astro.props;
+const { experience } = RESUME;
+---
+
+<section id="experience" class="py-24">
+  <div class="container-prose">
+    <FadeIn client:visible>
+      <div class="section-heading">
+        <span class="section-heading-num">03.</span>
+        <h2 class="section-heading-text">{t('sections.experience')}</h2>
+        <span class="section-heading-line"></span>
+      </div>
+    </FadeIn>
+
+    <ol class="relative space-y-8 border-l border-zinc-200 pl-8 dark:border-white/[0.08]">
+      {
+        experience.map((exp, i) => (
+          <FadeIn client:visible delay={i * 0.1}>
+            <li class="relative">
+              <span class="absolute -left-[33px] top-2 flex h-3 w-3 items-center justify-center">
+                <span class="absolute h-3 w-3 rounded-full bg-accent/30" />
+                <span class="relative h-1.5 w-1.5 rounded-full bg-accent shadow-[0_0_8px_rgba(59,130,246,0.6)]" />
+              </span>
+
+              <div class="rounded-2xl border border-zinc-200/70 bg-white/40 p-6 backdrop-blur-sm transition-colors hover:border-zinc-300 dark:border-white/[0.06] dark:bg-white/[0.02] dark:hover:border-white/[0.12]">
+                <div class="flex flex-wrap items-baseline justify-between gap-2">
+                  <h3 class="text-lg font-semibold tracking-tight">
+                    {pickLocale(exp.position, locale)}
+                    <span class="text-accent"> @ {pickLocale(exp.company, locale)}</span>
+                  </h3>
+                  <span class="font-mono text-xs text-zinc-500 dark:text-zinc-400">
+                    {pickLocale(exp.period, locale)}
+                  </span>
+                </div>
+                <p class="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
+                  📍 {pickLocale(exp.location, locale)}
+                </p>
+
+                <ul class="mt-4 space-y-1.5 text-sm leading-relaxed text-zinc-600 dark:text-zinc-300">
+                  {pickLocale(exp.description, locale).map((d) => (
+                    <li class="flex gap-2">
+                      <span class="mt-2 inline-block h-1 w-1 flex-none rounded-full bg-accent/60" />
+                      <span>{d}</span>
+                    </li>
+                  ))}
+                </ul>
+
+                {exp.tech && exp.tech.length > 0 && (
+                  <div class="mt-4 flex flex-wrap gap-1.5">
+                    {exp.tech.map((tag) => (
+                      <Badge variant="mono">{tag}</Badge>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </li>
+          </FadeIn>
+        ))
+      }
+    </ol>
+  </div>
+</section>

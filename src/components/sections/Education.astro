@@ -1,0 +1,46 @@
+---
+import { RESUME } from '@/data/resume';
+import { type Locale } from '@/config';
+import { pickLocale } from '@/i18n';
+import FadeIn from '@/components/interactive/FadeIn.tsx';
+
+interface Props {
+  locale: Locale;
+  t: (key: string) => string;
+}
+const { locale, t } = Astro.props;
+const { education } = RESUME;
+---
+
+<section id="education" class="py-24">
+  <div class="container-prose">
+    <FadeIn client:visible>
+      <div class="section-heading">
+        <span class="section-heading-num">05.</span>
+        <h2 class="section-heading-text">{t('sections.education')}</h2>
+        <span class="section-heading-line"></span>
+      </div>
+    </FadeIn>
+
+    <div class="space-y-4">
+      {
+        education.map((edu, i) => (
+          <FadeIn client:visible delay={i * 0.1}>
+            <div class="flex flex-wrap items-baseline justify-between gap-2 border-b border-zinc-200/60 pb-4 dark:border-white/[0.06]">
+              <div>
+                <h3 class="font-semibold tracking-tight">{pickLocale(edu.school, locale)}</h3>
+                <p class="text-sm text-zinc-600 dark:text-zinc-400">
+                  {pickLocale(edu.degree, locale)}
+                </p>
+                {edu.description && (
+                  <p class="mt-1 text-xs text-zinc-500">{pickLocale(edu.description, locale)}</p>
+                )}
+              </div>
+              <span class="font-mono text-xs text-zinc-500">{pickLocale(edu.period, locale)}</span>
+            </div>
+          </FadeIn>
+        ))
+      }
+    </div>
+  </div>
+</section>

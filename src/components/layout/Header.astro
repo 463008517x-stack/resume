@@ -1,0 +1,66 @@
+---
+import { type Locale } from '@/config';
+import ThemeToggle from '@/components/interactive/ThemeToggle.tsx';
+import LanguageSwitcher from '@/components/interactive/LanguageSwitcher.tsx';
+
+interface Props {
+  locale: Locale;
+  t: (key: string) => string;
+}
+
+const { locale, t } = Astro.props;
+
+const navItems = [
+  { href: '#about', label: t('nav.about') },
+  { href: '#skills', label: t('nav.skills') },
+  { href: '#experience', label: t('nav.experience') },
+  { href: '#projects', label: t('nav.projects') },
+  { href: '#education', label: t('nav.education') },
+  { href: '#contact', label: t('nav.contact') },
+];
+
+const guestbookHref = `/${locale}/guestbook`;
+---
+
+<header
+  class="glass sticky top-0 z-50 w-full border-b border-zinc-900/[0.06] dark:border-white/[0.06]"
+>
+  <nav class="container-prose flex h-16 items-center justify-between">
+    <a
+      href={`/${locale}/`}
+      class="flex items-center gap-2 font-mono text-sm font-medium tracking-tight transition-colors hover:text-accent"
+    >
+      <span class="inline-block h-2 w-2 rounded-full bg-accent shadow-[0_0_12px_rgba(59,130,246,0.6)]"
+      ></span>
+      <span>~/yuesheng</span>
+    </a>
+
+    <ul class="hidden items-center gap-1 md:flex">
+      {
+        navItems.map((item) => (
+          <li>
+            <a
+              href={item.href}
+              class="rounded-md px-3 py-1.5 text-sm text-zinc-600 transition-colors hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white"
+            >
+              {item.label}
+            </a>
+          </li>
+        ))
+      }
+      <li>
+        <a
+          href={guestbookHref}
+          class="rounded-md px-3 py-1.5 text-sm text-zinc-600 transition-colors hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white"
+        >
+          {t('nav.guestbook')}
+        </a>
+      </li>
+    </ul>
+
+    <div class="flex items-center gap-2">
+      <LanguageSwitcher client:load locale={locale} />
+      <ThemeToggle client:load />
+    </div>
+  </nav>
+</header>

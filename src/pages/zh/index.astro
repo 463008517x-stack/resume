@@ -1,0 +1,27 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Hero from '@/components/sections/Hero.astro';
+import About from '@/components/sections/About.astro';
+import Skills from '@/components/sections/Skills.astro';
+import Experience from '@/components/sections/Experience.astro';
+import Projects from '@/components/sections/Projects.astro';
+import Education from '@/components/sections/Education.astro';
+import Contact from '@/components/sections/Contact.astro';
+import { useTranslations } from '@/i18n';
+import { RESUME } from '@/data/resume';
+
+const locale = 'zh' as const;
+const t = useTranslations(locale);
+const title = `${RESUME.hero.name.zh} · ${RESUME.hero.role.zh}`;
+const description = RESUME.hero.intro.zh;
+---
+
+<BaseLayout title={title} description={description} locale={locale}>
+  <Hero locale={locale} t={t} />
+  <About locale={locale} t={t} />
+  <Skills locale={locale} t={t} />
+  <Experience locale={locale} t={t} />
+  <Projects locale={locale} t={t} />
+  <Education locale={locale} t={t} />
+  <Contact locale={locale} t={t} />
+</BaseLayout>

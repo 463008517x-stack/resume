@@ -1,0 +1,35 @@
+---
+import { SITE } from '@/config';
+const baseHref = SITE.base.endsWith('/') ? SITE.base : SITE.base + '/';
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Redirecting...</title>
+    <meta name="robots" content="noindex" />
+    <script is:inline define:vars={{ baseHref }}>
+      (function () {
+        const stored = localStorage.getItem('lang');
+        let target = stored;
+        if (!target) {
+          const browser = (navigator.language || 'zh').toLowerCase();
+          target = browser.startsWith('zh') ? 'zh' : 'en';
+        }
+        const url = baseHref + target + '/';
+        window.location.replace(url);
+      })();
+    </script>
+    <noscript>
+      <meta http-equiv="refresh" content={`0; url=${baseHref}zh/`} />
+    </noscript>
+  </head>
+  <body>
+    <p style="font-family: system-ui; padding: 2rem; color: #999;">
+      Redirecting to your preferred language...
+      <a href={`${baseHref}zh/`}>中文</a> /
+      <a href={`${baseHref}en/`}>English</a>
+    </p>
+  </body>
+</html>

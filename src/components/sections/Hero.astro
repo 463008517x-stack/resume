@@ -1,0 +1,112 @@
+---
+import { RESUME } from '@/data/resume';
+import { SOCIAL, type Locale } from '@/config';
+import { pickLocale } from '@/i18n';
+import SmartImage from '@/components/ui/SmartImage.astro';
+import Button from '@/components/ui/Button.astro';
+import { Github, Mail, ArrowDown, MapPin } from 'lucide-react';
+
+interface Props {
+  locale: Locale;
+  t: (key: string) => string;
+}
+
+const { locale, t } = Astro.props;
+const { hero } = RESUME;
+---
+
+<section class="relative pb-24 pt-20 sm:pb-32 sm:pt-28">
+  <div class="container-prose">
+    <div class="grid grid-cols-1 items-center gap-12 lg:grid-cols-[1fr_auto] lg:gap-16">
+      <div class="order-2 lg:order-1">
+        <div
+          class="mb-4 inline-flex items-center gap-2 rounded-full border border-zinc-200/80 bg-white/60 px-3 py-1 text-xs text-zinc-600 backdrop-blur-sm dark:border-white/[0.08] dark:bg-white/[0.04] dark:text-zinc-400"
+        >
+          <span class="relative flex h-1.5 w-1.5">
+            <span
+              class="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75"
+            ></span>
+            <span class="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
+          </span>
+          <span>{pickLocale(hero.status, locale)}</span>
+          <span class="text-zinc-300 dark:text-zinc-700">·</span>
+          <MapPin className="h-3 w-3" />
+          <span>{pickLocale(hero.location, locale)}</span>
+        </div>
+
+        <h1 class="text-4xl font-bold tracking-tightest sm:text-5xl lg:text-6xl">
+          <span class="block text-zinc-500 dark:text-zinc-400">
+            {locale === 'zh' ? '你好，我是' : "Hi, I'm"}
+          </span>
+          <span class="text-gradient-accent block pb-2">
+            {pickLocale(hero.name, locale)}
+          </span>
+        </h1>
+
+        <p class="mt-3 text-xl font-medium text-zinc-700 dark:text-zinc-300 sm:text-2xl">
+          {pickLocale(hero.role, locale)}
+        </p>
+
+        <p class="mt-2 text-lg text-zinc-500 dark:text-zinc-400">
+          {pickLocale(hero.slogan, locale)}
+        </p>
+
+        <p class="mt-6 max-w-xl text-base leading-relaxed text-zinc-600 dark:text-zinc-400">
+          {pickLocale(hero.intro, locale)}
+        </p>
+
+        <div class="mt-8 flex flex-wrap items-center gap-3">
+          <Button href="#contact" variant="primary">
+            <Mail className="h-4 w-4" />
+            {t('hero.cta_contact')}
+          </Button>
+          <Button href="#projects" variant="secondary">
+            {t('hero.cta_projects')}
+          </Button>
+          {
+            SOCIAL.github && (
+              <a
+                href={SOCIAL.github}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="GitHub"
+                class="inline-flex h-10 w-10 items-center justify-center rounded-full border border-zinc-200 text-zinc-600 transition-colors hover:border-zinc-300 hover:text-zinc-900 dark:border-white/10 dark:text-zinc-400 dark:hover:border-white/20 dark:hover:text-white"
+              >
+                <Github className="h-4 w-4" />
+              </a>
+            )
+          }
+        </div>
+      </div>
+
+      <div class="order-1 lg:order-2">
+        <div class="group relative mx-auto h-40 w-40 sm:h-48 sm:w-48 lg:h-56 lg:w-56">
+          <div
+            class="absolute -inset-4 rounded-full bg-gradient-to-br from-blue-500/30 via-purple-500/20 to-transparent opacity-70 blur-2xl transition-opacity duration-500 group-hover:opacity-100"
+          >
+          </div>
+          <div
+            class="relative h-full w-full overflow-hidden rounded-full border border-white/40 shadow-2xl ring-1 ring-zinc-900/[0.04] dark:border-white/10 dark:ring-white/[0.04]"
+          >
+            <SmartImage
+              src={hero.avatar}
+              alt={pickLocale(hero.name, locale)}
+              class="h-full w-full"
+              loading="eager"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-16 hidden justify-center lg:flex">
+      <a
+        href="#about"
+        class="group inline-flex flex-col items-center gap-2 text-xs text-zinc-400 transition-colors hover:text-accent dark:text-zinc-500"
+      >
+        <span class="font-mono uppercase tracking-widest">{t('hero.scroll')}</span>
+        <ArrowDown className="h-4 w-4 animate-bounce group-hover:animate-none" />
+      </a>
+    </div>
+  </div>
+</section>

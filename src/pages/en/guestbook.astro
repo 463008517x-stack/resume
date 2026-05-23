@@ -1,0 +1,34 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Giscus from '@/components/interactive/Giscus.tsx';
+import FadeIn from '@/components/interactive/FadeIn.tsx';
+import { useTranslations } from '@/i18n';
+
+const locale = 'en' as const;
+const t = useTranslations(locale);
+---
+
+<BaseLayout
+  title={`${t('guestbook.title')} · Yuesheng Feng`}
+  description={t('guestbook.description')}
+  locale={locale}
+>
+  <section class="py-24">
+    <div class="container-prose">
+      <FadeIn client:visible>
+        <div class="section-heading">
+          <span class="section-heading-num">💬</span>
+          <h1 class="section-heading-text">{t('guestbook.title')}</h1>
+          <span class="section-heading-line"></span>
+        </div>
+        <p class="mb-10 max-w-2xl text-lg text-zinc-600 dark:text-zinc-400">
+          {t('guestbook.description')}
+        </p>
+      </FadeIn>
+
+      <FadeIn client:visible delay={0.1}>
+        <Giscus client:only="react" locale={locale} />
+      </FadeIn>
+    </div>
+  </section>
+</BaseLayout>

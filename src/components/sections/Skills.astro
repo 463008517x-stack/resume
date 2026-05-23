@@ -1,0 +1,45 @@
+---
+import { RESUME } from '@/data/resume';
+import { type Locale } from '@/config';
+import { pickLocale } from '@/i18n';
+import Card from '@/components/ui/Card.astro';
+import FadeIn from '@/components/interactive/FadeIn.tsx';
+
+interface Props {
+  locale: Locale;
+  t: (key: string) => string;
+}
+const { locale, t } = Astro.props;
+const { skills } = RESUME;
+---
+
+<section id="skills" class="py-24">
+  <div class="container-prose">
+    <FadeIn client:visible>
+      <div class="section-heading">
+        <span class="section-heading-num">02.</span>
+        <h2 class="section-heading-text">{t('sections.skills')}</h2>
+        <span class="section-heading-line"></span>
+      </div>
+    </FadeIn>
+
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      {
+        skills.map((s, i) => (
+          <FadeIn client:visible delay={i * 0.05}>
+            <Card hoverable class="h-full p-6">
+              <h3 class="mb-4 font-mono text-sm uppercase tracking-wider text-accent">
+                {pickLocale(s.category, locale)}
+              </h3>
+              <ul class="space-y-1.5">
+                {s.items.map((item) => (
+                  <li class="text-sm text-zinc-600 dark:text-zinc-300">{item}</li>
+                ))}
+              </ul>
+            </Card>
+          </FadeIn>
+        ))
+      }
+    </div>
+  </div>
+</section>

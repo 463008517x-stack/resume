@@ -1,0 +1,51 @@
+---
+import { RESUME } from '@/data/resume';
+import { SOCIAL, type Locale } from '@/config';
+import { pickLocale } from '@/i18n';
+import Button from '@/components/ui/Button.astro';
+import FadeIn from '@/components/interactive/FadeIn.tsx';
+import { Mail, Github } from 'lucide-react';
+
+interface Props {
+  locale: Locale;
+  t: (key: string) => string;
+}
+const { locale, t } = Astro.props;
+const { contact } = RESUME;
+---
+
+<section id="contact" class="py-24">
+  <div class="container-prose">
+    <FadeIn client:visible>
+      <div class="section-heading">
+        <span class="section-heading-num">06.</span>
+        <h2 class="section-heading-text">{t('sections.contact')}</h2>
+        <span class="section-heading-line"></span>
+      </div>
+    </FadeIn>
+
+    <FadeIn client:visible delay={0.1}>
+      <div class="mx-auto max-w-2xl text-center">
+        <h3 class="mb-4 text-3xl font-bold tracking-tighter sm:text-4xl">{t('contact.title')}</h3>
+        <p class="mb-8 text-lg leading-relaxed text-zinc-600 dark:text-zinc-400">
+          {pickLocale(contact.description, locale)}
+        </p>
+        <div class="flex flex-wrap items-center justify-center gap-3">
+          <Button href={`mailto:${contact.email}`} variant="primary" size="lg">
+            <Mail className="h-4 w-4" />
+            {t('contact.cta')}
+          </Button>
+          {
+            SOCIAL.github && (
+              <Button href={SOCIAL.github} variant="secondary" size="lg" external>
+                <Github className="h-4 w-4" />
+                GitHub
+              </Button>
+            )
+          }
+        </div>
+        <p class="mt-6 font-mono text-sm text-zinc-500">{contact.email}</p>
+      </div>
+    </FadeIn>
+  </div>
+</section>

@@ -1,0 +1,138 @@
+---
+import { RESUME } from '@/data/resume';
+import { type Locale } from '@/config';
+import { pickLocale } from '@/i18n';
+import Card from '@/components/ui/Card.astro';
+import Badge from '@/components/ui/Badge.astro';
+import SmartImage from '@/components/ui/SmartImage.astro';
+import FadeIn from '@/components/interactive/FadeIn.tsx';
+import { Github, ExternalLink } from 'lucide-react';
+
+interface Props {
+  locale: Locale;
+  t: (key: string) => string;
+}
+const { locale, t } = Astro.props;
+const { projects } = RESUME;
+const featured = projects.filter((p) => p.featured);
+const others = projects.filter((p) => !p.featured);
+---
+
+<section id="projects" class="py-24">
+  <div class="container-prose">
+    <FadeIn client:visible>
+      <div class="section-heading">
+        <span class="section-heading-num">04.</span>
+        <h2 class="section-heading-text">{t('sections.projects')}</h2>
+        <span class="section-heading-line"></span>
+      </div>
+    </FadeIn>
+
+    {
+      featured.length > 0 && (
+        <div class="mb-12">
+          <h3 class="mb-6 font-mono text-xs uppercase tracking-widest text-zinc-500">
+            {t('sections.featured_projects')}
+          </h3>
+          <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+            {featured.map((p, i) => (
+              <FadeIn client:visible delay={i * 0.1}>
+                <Card hoverable class="h-full overflow-hidden">
+                  <SmartImage src={p.cover} alt={pickLocale(p.title, locale)} aspectRatio="16/9" />
+                  <div class="p-6">
+                    <h4 class="mb-2 text-lg font-semibold tracking-tight">
+                      {pickLocale(p.title, locale)}
+                    </h4>
+                    <p class="mb-4 text-sm leading-relaxed text-zinc-600 dark:text-zinc-300">
+                      {pickLocale(p.description, locale)}
+                    </p>
+                    <div class="mb-4 flex flex-wrap gap-1.5">
+                      {p.tags.map((tag) => (
+                        <Badge variant="mono">{tag}</Badge>
+                      ))}
+                    </div>
+                    <div class="flex gap-3 text-sm">
+                      {p.github && (
+                        <a
+                          href={p.github}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          class="inline-flex items-center gap-1.5 text-zinc-500 transition-colors hover:text-accent"
+                        >
+                          <Github className="h-4 w-4" />
+                          {t('common.view_code')}
+                        </a>
+                      )}
+                      {p.demo && (
+                        <a
+                          href={p.demo}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          class="inline-flex items-center gap-1.5 text-zinc-500 transition-colors hover:text-accent"
+                        >
+                          <ExternalLink className="h-4 w-4" />
+                          {t('common.view_demo')}
+                        </a>
+                      )}
+                    </div>
+                  </div>
+                </Card>
+              </FadeIn>
+            ))}
+          </div>
+        </div>
+      )
+    }
+
+    {
+      others.length > 0 && (
+        <div>
+          <h3 class="mb-6 font-mono text-xs uppercase tracking-widest text-zinc-500">
+            {t('sections.other_projects')}
+          </h3>
+          <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {others.map((p, i) => (
+              <FadeIn client:visible delay={i * 0.05}>
+                <Card hoverable class="h-full p-5">
+                  <h4 class="mb-2 font-semibold tracking-tight">{pickLocale(p.title, locale)}</h4>
+                  <p class="mb-3 line-clamp-2 text-sm text-zinc-600 dark:text-zinc-400">
+                    {pickLocale(p.description, locale)}
+                  </p>
+                  <div class="mb-3 flex flex-wrap gap-1">
+                    {p.tags.slice(0, 3).map((tag) => (
+                      <Badge variant="mono" class="text-[10px]">
+                        {tag}
+                      </Badge>
+                    ))}
+                  </div>
+                  <div class="flex gap-3 text-xs text-zinc-500">
+                    {p.github && (
+                      <a
+                        href={p.github}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="inline-flex items-center gap-1 transition-colors hover:text-accent"
+                      >
+                        <Github className="h-3.5 w-3.5" />
+                      </a>
+                    )}
+                    {p.demo && (
+                      <a
+                        href={p.demo}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="inline-flex items-center gap-1 transition-colors hover:text-accent"
+                      >
+                        <ExternalLink className="h-3.5 w-3.5" />
+                      </a>
+                    )}
+                  </div>
+                </Card>
+              </FadeIn>
+            ))}
+          </div>
+        </div>
+      )
+    }
+  </div>
+</section>
