@@ -56,4 +56,6 @@ export const zh = {
   },
 } as const;
 
-export type UIStrings = typeof zh;
+// 宽化类型：允许英文字符串与中文不同
+type Widen<T> = T extends string ? string : { [K in keyof T]: Widen<T[K]> };
+export type UIStrings = Widen<typeof zh>;

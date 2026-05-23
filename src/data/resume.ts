@@ -288,7 +288,7 @@ export const RESUME = {
       tags: ['政策研究', '数据分析', '项目管理', '实地调研'],
       featured: true,
     },
-  ] satisfies Project[],
+  ] as Project[],
 
   education: [
     {
